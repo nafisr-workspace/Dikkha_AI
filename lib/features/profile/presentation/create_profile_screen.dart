@@ -206,7 +206,8 @@ class _CreateProfileScreenState extends ConsumerState<CreateProfileScreen> {
       await storage.saveUser(user);
 
       if (mounted) {
-        context.go('${AppRoutes.main}/read');
+        // Navigate to onboarding tutorial for new users
+        context.go(AppRoutes.onboarding);
       }
     } catch (e) {
       if (mounted) {

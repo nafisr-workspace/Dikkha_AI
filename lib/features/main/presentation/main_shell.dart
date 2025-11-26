@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:dikkhaai/app/router.dart';
 import 'package:dikkhaai/app/theme.dart';
+import 'package:dikkhaai/core/providers/back_handler_provider.dart';
 import 'package:dikkhaai/data/services/storage_service.dart';
 
 class MainShell extends ConsumerStatefulWidget {
@@ -19,6 +20,10 @@ class _MainShellState extends ConsumerState<MainShell> {
   int _selectedIndex = 0;
 
   void _onDestinationSelected(int index) {
+    // Clear any existing back handler before switching tabs
+    // Each tab will register its own handler when it becomes visible
+    ref.read(backHandlerProvider.notifier).clearHandler();
+    
     setState(() {
       _selectedIndex = index;
     });
@@ -29,6 +34,9 @@ class _MainShellState extends ConsumerState<MainShell> {
         break;
       case 1:
         context.go('${AppRoutes.main}/chat');
+        break;
+      case 2:
+        context.go('${AppRoutes.main}/study');
         break;
     }
   }
@@ -194,7 +202,11 @@ class _MainShellState extends ConsumerState<MainShell> {
 
     // Update selected index based on current route
     final location = GoRouterState.of(context).uri.path;
-    if (location.contains('/chat') && _selectedIndex != 1) {
+    if (location.contains('/study') && _selectedIndex != 2) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() => _selectedIndex = 2);
+      });
+    } else if (location.contains('/chat') && _selectedIndex != 1) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         setState(() => _selectedIndex = 1);
       });
@@ -231,6 +243,11 @@ class _MainShellState extends ConsumerState<MainShell> {
             icon: Icon(Icons.chat_bubble_outline),
             selectedIcon: Icon(Icons.chat_bubble),
             label: 'AI Chat',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.school_outlined),
+            selectedIcon: Icon(Icons.school),
+            label: 'Materials',
           ),
         ],
       ),

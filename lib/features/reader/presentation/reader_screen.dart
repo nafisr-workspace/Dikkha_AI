@@ -29,6 +29,16 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen> {
   void initState() {
     super.initState();
     _loadUserSubjects();
+    // Set up back handler immediately
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _registerBackHandler();
+    });
+  }
+
+  @override
+  void didUpdateWidget(ReaderScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _registerBackHandler();
   }
 
   void _loadUserSubjects() {
@@ -194,19 +204,23 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen> {
     return _SubjectData(Icons.menu_book_rounded, AppColors.primaryViolet);
   }
 
-  void _updateBackHandler() {
+  void _registerBackHandler() {
+    if (!mounted) return;
+    
     final backHandler = ref.read(backHandlerProvider.notifier);
     
-    if (!_showSubjectSelection && _selectedSubject != null) {
-      // In reading mode - register back handler to go back to subjects
-      backHandler.setHandler(() {
+    // Always register a handler for this screen
+    backHandler.setHandler(() {
+      if (!mounted) return false;
+      
+      if (!_showSubjectSelection && _selectedSubject != null) {
+        // In reading mode - go back to subjects
         _goBackToSubjects();
         return true; // Back was handled
-      });
-    } else {
-      // In subject selection - clear handler (use default app behavior)
-      backHandler.clearHandler();
-    }
+      }
+      // In subject selection - let default behavior (double-tap exit) handle it
+      return false;
+    });
   }
 
   @override
@@ -218,9 +232,9 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Update back handler based on current state
+    // Ensure back handler is always registered when this screen is visible
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _updateBackHandler();
+      _registerBackHandler();
     });
 
     if (_subjects.isEmpty && !_isLoading) {

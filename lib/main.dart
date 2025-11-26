@@ -7,6 +7,8 @@ import 'package:dikkhaai/data/models/user.dart';
 import 'package:dikkhaai/data/models/chat_session.dart';
 import 'package:dikkhaai/data/models/chat_message.dart';
 import 'package:dikkhaai/data/models/reading_state.dart';
+import 'package:dikkhaai/data/models/quiz.dart';
+import 'package:dikkhaai/data/models/flashcard.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,12 +27,18 @@ void main() async {
   Hive.registerAdapter(ChatSessionAdapter());
   Hive.registerAdapter(ChatMessageAdapter());
   Hive.registerAdapter(ReadingStateAdapter());
+  Hive.registerAdapter(QuizAdapter());
+  Hive.registerAdapter(QuizQuestionAdapter());
+  Hive.registerAdapter(FlashcardSetAdapter());
+  Hive.registerAdapter(FlashcardAdapter());
 
   // Open Hive boxes
   await Hive.openBox<User>('users');
   await Hive.openBox<ChatSession>('chat_sessions');
   await Hive.openBox<ChatMessage>('chat_messages');
   await Hive.openBox<ReadingState>('reading_state');
+  await Hive.openBox<Quiz>('quizzes');
+  await Hive.openBox<FlashcardSet>('flashcards');
 
   runApp(
     const ProviderScope(

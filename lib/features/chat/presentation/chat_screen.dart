@@ -589,14 +589,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
             Expanded(
               child: Container(
                 constraints: const BoxConstraints(maxHeight: 120),
-                decoration: BoxDecoration(
-                  color: AppColors.creamyWhite,
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(
-                    color: AppColors.lavenderMist,
-                    width: 1.5,
-                  ),
-                ),
                 child: TextField(
                   controller: _inputController,
                   focusNode: _inputFocusNode,
@@ -610,10 +602,27 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with TickerProviderStat
                         ? 'Ask about $_selectedSubject...'
                         : 'Select a subject first...',
                     hintStyle: TextStyle(
-                      color: AppColors.softGrey.withValues(alpha: 0.7),
+                      color: AppColors.softGrey.withOpacity(0.7),
                       fontSize: 15,
                     ),
-                    border: InputBorder.none,
+                    filled: true,
+                    fillColor: AppColors.pureWhite,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide: BorderSide(color: AppColors.lavenderMist, width: 1.5),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide: BorderSide(color: AppColors.lavenderMist, width: 1.5),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide: BorderSide(color: AppColors.primaryViolet, width: 1.5),
+                    ),
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      borderSide: BorderSide(color: AppColors.paleGrey, width: 1.5),
+                    ),
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 20,
                       vertical: 12,

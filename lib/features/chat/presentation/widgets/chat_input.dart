@@ -50,32 +50,38 @@ class ChatInput extends StatelessWidget {
             ),
             // Text input
             Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.creamyWhite,
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: AppColors.paleGrey),
-                ),
-                child: TextField(
-                  controller: controller,
-                  enabled: isEnabled,
-                  maxLines: 4,
-                  minLines: 1,
-                  textCapitalization: TextCapitalization.sentences,
-                  decoration: InputDecoration(
-                    hintText: 'Ask me anything...',
-                    hintStyle: TextStyle(
-                      color: AppColors.softGrey.withValues(alpha: 0.7),
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 10,
-                    ),
+              child: TextField(
+                controller: controller,
+                enabled: isEnabled,
+                maxLines: 4,
+                minLines: 1,
+                textCapitalization: TextCapitalization.sentences,
+                decoration: InputDecoration(
+                  hintText: 'Ask me anything...',
+                  hintStyle: TextStyle(
+                    color: AppColors.softGrey.withOpacity(0.7),
                   ),
-                  style: Theme.of(context).textTheme.bodyLarge,
-                  onSubmitted: (_) => onSend(),
+                  filled: true,
+                  fillColor: AppColors.pureWhite,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: BorderSide(color: AppColors.paleGrey),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: BorderSide(color: AppColors.paleGrey),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: BorderSide(color: AppColors.primaryViolet),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                 ),
+                style: Theme.of(context).textTheme.bodyLarge,
+                onSubmitted: (_) => onSend(),
               ),
             ),
             const SizedBox(width: 8),

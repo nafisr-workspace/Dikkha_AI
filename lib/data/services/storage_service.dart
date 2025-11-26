@@ -4,6 +4,8 @@ import 'package:dikkhaai/data/models/user.dart';
 import 'package:dikkhaai/data/models/chat_session.dart';
 import 'package:dikkhaai/data/models/chat_message.dart';
 import 'package:dikkhaai/data/models/reading_state.dart';
+import 'package:dikkhaai/data/models/quiz.dart';
+import 'package:dikkhaai/data/models/flashcard.dart';
 
 final storageServiceProvider = Provider<StorageService>((ref) {
   return StorageService();
@@ -84,12 +86,76 @@ class StorageService {
     return _readingStateBox.get('current');
   }
 
+  // Quiz operations
+  Box<Quiz> get _quizBox => Hive.box<Quiz>('quizzes');
+
+  Future<void> saveQuiz(Quiz quiz) async {
+    await _quizBox.put(quiz.id, quiz);
+  }
+
+  List<Quiz> getAllQuizzes() {
+    return _quizBox.values.toList()
+      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+  }
+
+  List<Quiz> getQuizzesBySubject(String subject) {
+    return _quizBox.values
+        .where((quiz) => quiz.subject == subject)
+        .toList()
+      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+  }
+
+  Quiz? getQuiz(String id) {
+    return _quizBox.get(id);
+  }
+
+  Future<void> deleteQuiz(String id) async {
+    await _quizBox.delete(id);
+  }
+
+  Future<void> clearAllQuizzes() async {
+    await _quizBox.clear();
+  }
+
+  // Flashcard operations
+  Box<FlashcardSet> get _flashcardBox => Hive.box<FlashcardSet>('flashcards');
+
+  Future<void> saveFlashcardSet(FlashcardSet flashcardSet) async {
+    await _flashcardBox.put(flashcardSet.id, flashcardSet);
+  }
+
+  List<FlashcardSet> getAllFlashcardSets() {
+    return _flashcardBox.values.toList()
+      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+  }
+
+  List<FlashcardSet> getFlashcardSetsBySubject(String subject) {
+    return _flashcardBox.values
+        .where((set) => set.subject == subject)
+        .toList()
+      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+  }
+
+  FlashcardSet? getFlashcardSet(String id) {
+    return _flashcardBox.get(id);
+  }
+
+  Future<void> deleteFlashcardSet(String id) async {
+    await _flashcardBox.delete(id);
+  }
+
+  Future<void> clearAllFlashcardSets() async {
+    await _flashcardBox.clear();
+  }
+
   // Clear all data (for logout)
   Future<void> clearAllData() async {
     await _userBox.clear();
     await _sessionBox.clear();
     await _messageBox.clear();
     await _readingStateBox.clear();
+    await _quizBox.clear();
+    await _flashcardBox.clear();
   }
 }
 

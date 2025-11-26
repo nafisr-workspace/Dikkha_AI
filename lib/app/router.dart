@@ -10,6 +10,8 @@ import 'package:dikkhaai/features/main/presentation/main_shell.dart';
 import 'package:dikkhaai/features/reader/presentation/reader_screen.dart';
 import 'package:dikkhaai/features/chat/presentation/chat_screen.dart';
 import 'package:dikkhaai/features/chat/presentation/chat_history_screen.dart';
+import 'package:dikkhaai/features/study/presentation/study_screen.dart';
+import 'package:dikkhaai/features/onboarding/presentation/onboarding_tutorial_screen.dart';
 
 class AppRoutes {
   static const String splash = '/';
@@ -17,9 +19,11 @@ class AppRoutes {
   static const String phone = '/phone';
   static const String otp = '/otp';
   static const String createProfile = '/create-profile';
+  static const String onboarding = '/onboarding';
   static const String main = '/main';
   static const String profile = '/profile';
   static const String chatHistory = '/chat-history';
+  static const String study = '/study';
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -52,6 +56,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           return CreateProfileScreen(phoneNumber: phone);
         },
       ),
+      GoRoute(
+        path: AppRoutes.onboarding,
+        builder: (context, state) => const OnboardingTutorialScreen(),
+      ),
       ShellRoute(
         builder: (context, state, child) => MainShell(child: child),
         routes: [
@@ -74,6 +82,12 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: 'chat',
                 pageBuilder: (context, state) => const NoTransitionPage(
                   child: ChatScreen(),
+                ),
+              ),
+              GoRoute(
+                path: 'study',
+                pageBuilder: (context, state) => const NoTransitionPage(
+                  child: StudyScreen(),
                 ),
               ),
             ],
